@@ -4,11 +4,19 @@ import django.db.models.deletion
 from django.db import migrations, models
 
 
+def create_initial_roles(apps, schema_editor):
+    Rol = apps.get_model('Crud_admin', 'Rol')  
+    Rol.objects.create(nombre='Administrador')
+    Rol.objects.create(nombre='Editor')
+    Rol.objects.create(nombre='Usuario')
+
+
 class Migration(migrations.Migration):
 
     initial = True
 
     dependencies = [
+        # Add the dependencies if there are any previous migrations
     ]
 
     operations = [
@@ -31,7 +39,8 @@ class Migration(migrations.Migration):
                 ('correo', models.EmailField(max_length=60, unique=True)),
                 ('fecha_nacimiento', models.DateField()),
                 ('direccion', models.CharField(max_length=100)),
-                ('rol', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='Crud_admin.rol')),
+                ('rol', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='Crud_admin.rol')),  # Replace 'your_app' with the name of your application
             ],
         ),
+        migrations.RunPython(create_initial_roles),
     ]
